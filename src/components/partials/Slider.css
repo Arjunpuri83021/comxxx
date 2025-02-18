@@ -1,0 +1,52 @@
+/* Slider Container */
+
+.slider-container {
+    display: flex;
+    overflow-x: auto;
+    /* Enable horizontal scrolling */
+    scroll-snap-type: x mandatory;
+    /* Smooth snapping */
+    padding: 10px;
+    gap: 10px;
+    white-space: nowrap;
+    scrollbar-width: none;
+    /* Hide scrollbar for Firefox */
+}
+
+/* Hide scrollbar for Webkit browsers */
+
+.slider-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* Slider Item */
+
+.slider-item {
+    flex: 0 0 auto;
+    /* Prevent items from shrinking */
+    scroll-snap-align: center;
+    /* Snap items to center when scrolling */
+    background: #f0f0f0;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s ease;
+    /* Combined transitions */
+}
+
+/* Hover effect */
+
+/* Active item style */
+
+.slider-item.active {
+    background-color: #000000;
+    /* Active category color */
+    color: white;
+}
+
+html {
+    overflow-y: scroll;
+    /* Ensures the scrollbar is always present */
+}

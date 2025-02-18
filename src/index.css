@@ -1,0 +1,24 @@
+.card-body h1,
+h2 {
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+a{
+    text-decoration: none;
+}
+.card-body div {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: solid 1px #000000;
+}
+
+.card-body div p {
+    margin: 0px;
+}
+
+.card {
+    background-color: #f0f0f0;
+    color: black;
+    border: none;
+}
