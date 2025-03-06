@@ -113,6 +113,29 @@ function StarsVideo() {
             .replace(/[\s]+/g, "-")
             .replace(/[^a-z0-9-]/g, "");
     };
+    
+    const handleCardClick = async (id, currentViews) => {
+        try {
+            const updatedViews = (currentViews || 0) + 1;
+    
+            // Update UI immediately
+            const updatedVideos = results.map((item) =>
+                item._id === id ? { ...item, views: updatedViews } : item
+            );
+            setResults(updatedVideos);
+    
+            // Send API request to update views
+            await fetch(`${apiUrl}/updateviews/${id}`, {
+                method: "POST",
+                mode: "cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ views: updatedViews }),
+            });
+        } catch (error) {
+            console.error("Error updating views:", error);
+        }
+    };
+    
 
     return (
         <>
@@ -139,7 +162,7 @@ function StarsVideo() {
                     {results.length > 0 ? (
                         results.map((video, index) => (
                             <div className="col" key={video._id} ref={index === results.length - 1 ? lastVideoRef : null}>
-                                <Link to={`/video/${video._id}-${slugifyTitle(video.titel)}`} style={{ textDecoration: "none" }}>
+                                <Link  onClick={() => handleCardClick(video._id, video.views)} to={`/video/${video._id}-${slugifyTitle(video.titel)}`} style={{ textDecoration: "none" }}>
                                     <div className="card">
                                         <img
                                             loading="lazy"

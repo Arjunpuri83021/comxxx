@@ -26,6 +26,7 @@ import Blueflim from './components/Category/Blueflim';
 import Family from './components/Category/Family';
 import Teen from './components/Category/Teen';
 import SmallTits from './components/Category/SmallTits';
+import Network from './components/Networks';
 
 function App() {
     return (
@@ -41,6 +42,7 @@ function App() {
                 <Route path='/new-content' element={<NewContent />} />
                 <Route path='/most-liked' element={<MostLiked />} />
                 <Route path='/pornstars' element={<PornStars />} />
+                <Route path='/our-network' element={<Network/>} />
                 
                 <Route path='/category/scout69' element={<Scout69 />} />
                 <Route path='/category/scout69/:page' element={<Scout69 />} />

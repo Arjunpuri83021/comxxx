@@ -105,6 +105,27 @@ function Video() {
         }
     }, [videoData, numericId]);
 
+
+
+    const handleCardClick = async (id, currentViews) => {
+        try {
+          const updatedViews = (currentViews || 0) + 1;
+          const updatedPosts = postdata.map((item) =>
+            item._id === id ? { ...item, views: updatedViews } : item
+          );
+          setPostData(updatedPosts);
+    
+          await fetch(`${apiUrl}/updateviews/${id}`, {
+            method: "POST",
+            mode: "cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ views: updatedViews }),
+          });
+        } catch (error) {
+          console.error("Error updating views:", error);
+        }
+      };
+
     return (
         <>
             <Helmet>
@@ -167,7 +188,7 @@ function Video() {
                 <div className="row row-cols-1 row-cols-md-4 g-4 mt-0 m-auto">
                     {postdata.map((post) => (
                         <div className="col" key={post._id}>
-                            <Link
+                            <Link onClick={(e) => handleCardClick(post._id, post.views)}
                                 to={`/video/${post._id}-${slugifyTitle(post.titel)}`}
                                 style={{ textDecoration: "none" }}
                             >

@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet";
 import Sidebar from "../partials/Navbar";
 import Slider from "../partials/Slider";
 import PaginationComponent from '../partials/PaginationComponent';
+import './category.css'
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -22,13 +23,13 @@ function Dehati() {
 
 
     useEffect(() => {
-            if (currentPage === 1 && window.location.pathname !== '/category/dehati-sex') {
-                navigate('/category/dehati-sex');  // Redirect to root URL
-            }
-        }, [currentPage, navigate]);
+        if (currentPage === 1 && window.location.pathname !== '/category/dehati-sex') {
+            navigate('/category/dehati-sex');  // Redirect to root URL
+        }
+    }, [currentPage, navigate]);
 
     useEffect(() => {
-        document.title = `Dehati Videos page ${currentPage} on comxxx`;
+        document.title = `Dehati Videos page ${currentPage} on comxxx – Watch rural desi clips in HD`;
         const metaDescContent = "Explore a collection of premium Milf videos on Dehati. Enjoy handpicked, high-quality content filtered for your preferences.";
 
         const metaDesc = document.querySelector("meta[name='description']");
@@ -86,10 +87,31 @@ function Dehati() {
 
     const slugifyTitle = (title) => title.toLowerCase().trim().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
 
+
+    const handleCardClick = async (id, currentViews) => {
+        try {
+          const updatedViews = (currentViews || 0) + 1;
+          const updatedPosts = postData.map((item) =>
+            item._id === id ? { ...item, views: updatedViews } : item
+          );
+          setPostData(updatedPosts);
+    
+          await fetch(`${apiUrl}/updateviews/${id}`, {
+            method: "POST",
+            mode: "cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ views: updatedViews }),
+          });
+        } catch (error) {
+          console.error("Error updating views:", error);
+        }
+      };
+
+
     return (
         <>
             <Helmet>
-                <title>Dehati Videos on comxxx</title>
+                <title>Dehati Videos on ComXXX – Watch rural desi clips in HD</title>
                 <link rel="canonical" href={`https://comxxx.fun/category/dehati-sex/${currentPage === 1 ? '' : currentPage}`} /> {/* Dynamic canonical URL */}
                 <meta name="description" content="Explore a collection of premium Milf videos on Dehati. Enjoy handpicked, high-quality content filtered for your preferences." />
                 <meta name="robots" content="index, follow" />
@@ -100,19 +122,19 @@ function Dehati() {
                 <h1>Dehati sex Videos</h1>
                 {loading && <p>Loading...</p>}
                 {error && <p style={{ color: "red" }}>{error}</p>}
-                <div className="row row-cols-2 row-cols-md-3 g-4">
+                <div className="row row-cols-2 row-cols-md-3 g-2">
                     {postData.map((post) => (
                         <div className="col" key={post._id}>
-                            <Link style={{ textDecoration: "none" }} to={`/video/${post._id}-${slugifyTitle(post.titel)}`}>
+                            <Link onClick={(e) => handleCardClick(post._id, post.views)} style={{ textDecoration: "none" }} to={`/video/${post._id}-${slugifyTitle(post.titel)}`}>
                                 <div className="card">
                                     <img style={{ height: "250px" }} src={post.imageUrl} className="card-img-top card-img" alt={post.altKeywords?.trim() || post.titel} />
-                                    <div className="card-body">
-                                        <div>
-                                            <p><i className="bi bi-hand-thumbs-up-fill"></i> {Math.min(Math.round((post.views / 200) * 100), 100)}%</p>
-                                            <p><i className="bi bi-eye-fill"></i> {post.views || 2}K+..</p>
-                                            <p><i className="bi bi-clock-fill"></i> {post.minutes}</p>
+                                    <div className="card-body p-2">
+                                        <h2 className="card-title" style={{ fontSize: "13px", margin: "0px", padding: "0px" }}>{post.titel.length > 30 ? `${post.titel.substring(0, 30)}...` : post.titel}</h2>
+                                        <div style={{ borderBottom: "0px", justifyContent: "start", marginTop: "5px", }}>
+
+                                            <p><i className="bi bi-eye-fill"></i> {post.views || 2}K+</p>
+                                            <p><i className="bi bi-clock-fill ms-3"></i> {post.minutes}</p>
                                         </div>
-                                        <h2 className="card-title" style={{ fontSize: "13px" }}>{post.titel.length > 40 ? `${post.titel.substring(0, 40)}...` : post.titel}</h2>
                                     </div>
                                 </div>
                             </Link>

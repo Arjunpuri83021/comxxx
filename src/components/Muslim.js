@@ -69,6 +69,24 @@ function Muslim() {
         return title.toLowerCase().trim().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
     };
 
+    const handleCardClick = async (id, currentViews) => {
+        try {
+          const updatedViews = (currentViews || 0) + 1;
+          const updatedPosts = indians.map((item) =>
+            item._id === id ? { ...item, views: updatedViews } : item
+          );
+          setIndians(updatedPosts);
+    
+          await fetch(`${apiUrl}/updateviews/${id}`, {
+            method: "POST",
+            mode: "cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ views: updatedViews }),
+          });
+        } catch (error) {
+          console.error("Error updating views:", error);
+        }
+      };
     return (
         <>
             <Helmet>
@@ -88,7 +106,7 @@ function Muslim() {
                 <div className="row row-cols-1 row-cols-md-3 g-4">
                     {indians.map((post, index) => (
                         <div className="col" key={post._id}>
-                            <Link to={`/video/${post._id}-${slugifyTitle(post.titel)}`} style={{ textDecoration: "none" }}>
+                            <Link onClick={(e) => handleCardClick(post._id, post.views)} to={`/video/${post._id}-${slugifyTitle(post.titel)}`} style={{ textDecoration: "none" }}>
                                 <div className="card">
                                     <img loading="lazy" style={{ height: "250px" }} src={post.imageUrl} className="card-img-top" alt={post.altKeywords?.trim() || post.titel} />
                                     <div className="card-body">

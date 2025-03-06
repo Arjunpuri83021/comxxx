@@ -65,6 +65,27 @@ function TopVideo() {
 
     const slugifyTitle = (title) => title.toLowerCase().trim().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
 
+    const handleCardClick = async (id, currentViews) => {
+        try {
+          const updatedViews = (currentViews || 0) + 1;
+          const updatedPosts = postData.map((item) =>
+            item._id === id ? { ...item, views: updatedViews } : item
+          );
+          setPostData(updatedPosts);
+    
+          await fetch(`${apiUrl}/updateviews/${id}`, {
+            method: "POST",
+            mode: "cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ views: updatedViews }),
+          });
+        } catch (error) {
+          console.error("Error updating views:", error);
+        }
+      };
+
+
+
     return (
         <>
             <Helmet>
@@ -82,7 +103,7 @@ function TopVideo() {
                  <div className="row row-cols-1 row-cols-md-3 g-4">
                                     {postData.map((post, index) => (
                                         <div className="col" key={post._id}>
-                                            <Link to={`/video/${post._id}-${slugifyTitle(post.titel)}`} style={{ textDecoration: "none" }}>
+                                            <Link onClick={(e) => handleCardClick(post._id, post.views)} to={`/video/${post._id}-${slugifyTitle(post.titel)}`} style={{ textDecoration: "none" }}>
                                                 <div className="card">
                                                     <img loading="lazy" style={{ height: "250px" }} src={post.imageUrl} className="card-img-top" alt={post.altKeywords?.trim() || post.titel} />
                                                     <div className="card-body">
